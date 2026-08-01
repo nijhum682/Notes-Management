@@ -1,69 +1,61 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'services/database_service.dart';
+import 'services/mock_database_service.dart';
+import 'services/firestore_service.dart';
+import 'screens/notes_list_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  DatabaseService dbService;
+
+  try {
+    if (DefaultFirebaseOptions.isConfigured) {
+      // Initialize Firebase if user has provided credentials
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      dbService = FirestoreService();
+      debugPrint('Firebase initialized successfully. Using Firestore.');
+    } else {
+      // Configuration is empty (default state), use Mock mode
+      dbService = MockDatabaseService();
+      debugPrint('Firebase not configured. Falling back to Mock Database.');
+    }
+  } catch (e) {
+    // If initialization fails (e.g. offline, bad config), fallback to Mock mode
+    dbService = MockDatabaseService();
+    debugPrint('Firebase initialization failed: $e. Falling back to Mock Database.');
+  }
+
+  runApp(NotesApp(databaseService: dbService));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class NotesApp extends StatelessWidget {
+  final DatabaseService databaseService;
+
+  const NotesApp({super.key, required this.databaseService});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      title: 'Aether Notes',
+      debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: const Color(0xFF3B82F6),
+        scaffoldBackgroundColor: const Color(0xFF0B0F19), // Midnight background
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF3B82F6),
+          secondary: Color(0xFF14B8A6),
+          surface: Color(0xFF1E293B),
+        ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      home: NotesListScreen(databaseService: databaseService),
     );
   }
 }

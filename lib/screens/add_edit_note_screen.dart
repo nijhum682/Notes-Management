@@ -1,4 +1,4 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/note.dart';
@@ -343,7 +343,7 @@ class _AddEditNoteScreenState extends State<AddEditNoteScreen> {
     final themeColor = Color(_colorValue);
 
     return Container(
-      width: double.infinite,
+      width: double.infinity,
       height: 56,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),

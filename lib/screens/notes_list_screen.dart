@@ -1,4 +1,4 @@
-﻿import 'dart:ui';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/note.dart';
@@ -86,12 +86,12 @@ class _NotesListScreenState extends State<NotesListScreen> {
                 decoration: BoxDecoration(
                   color: widget.databaseService.isMock
                       ? Colors.amber.withOpacity(0.12)
-                      : Colors.emerald.withOpacity(0.12),
+                      : Colors.green.withOpacity(0.12),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
                     color: widget.databaseService.isMock
                         ? Colors.amber.withOpacity(0.3)
-                        : Colors.emerald.withOpacity(0.3),
+                        : Colors.green.withOpacity(0.3),
                     width: 1,
                   ),
                 ),
@@ -104,13 +104,13 @@ class _NotesListScreenState extends State<NotesListScreen> {
                       decoration: BoxDecoration(
                         color: widget.databaseService.isMock
                             ? Colors.amber
-                            : Colors.emerald,
+                            : Colors.green,
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
                             color: widget.databaseService.isMock
                                 ? Colors.amber.withOpacity(0.5)
-                                : Colors.emerald.withOpacity(0.5),
+                                : Colors.green.withOpacity(0.5),
                             blurRadius: 6,
                             spreadRadius: 2,
                           )
@@ -125,7 +125,7 @@ class _NotesListScreenState extends State<NotesListScreen> {
                         fontWeight: FontWeight.w600,
                         color: widget.databaseService.isMock
                             ? Colors.amber.shade200
-                            : Colors.emerald.shade200,
+                            : Colors.green.shade200,
                       ),
                     ),
                   ],
